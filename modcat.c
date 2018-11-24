@@ -59,44 +59,33 @@ init_mod(modcat_mod *mod, char *md, int mdsz)
 	int i;
 	
 	mod->title = malloc(21);
-/*	memcpy(mod->title, md, 20); */
 	strlcpy(mod->title, md, 20);
-	printf("Title: %s\n", mod->title);
+ 	if(verbose)
+		printf("Title: %s\n", mod->title);
 	mod->n_channels = 4;
-	printf("Channels: %d\n", mod->n_channels);
-	
+	if(verbose)
+		printf("Channels: %d\n", mod->n_channels);
 	mod->tunelength = md[950];
-	printf("Length: %d\n", mod->tunelength);
-
+	if(verbose)
+		printf("Length: %d\n", mod->tunelength);
 	mod->maxpos = md[951];
-	printf("MaxPos: %d\n", mod->maxpos);
-
-/*	mod->poslist = malloc(129);
-	strlcpy(mod->poslist, md+952, 129); 
-	memcpy(mod->poslist, md[952], 129);
-	printf("PosList: %s\n", mod->poslist);
- */	
+	if (verbose)
+		printf("MaxPos: %d\n", mod->maxpos);
+	mod->poslist = &md[952];
 	mod->format = malloc(5);
 	strlcpy(mod->format, md+1080, 5);
-	printf("Format: %s\n", mod->format);
-
+	if(verbose)
+		printf("Format: %s\n", mod->format);
 	mod->patterns = &md[1084];
 
-	printf("OK: %s\n", mod->title);
-	
 	mod->n_samples = 0;
 	char *bp = md+20;
 	for(i = 0; i < 31; i++){
 		bp += 30;
 	}
 	mod->n_samples = i;
-	printf("Samples: %d\n", mod->n_samples);
-
-	mod->n_channels = 0;
-	for (i = 0; i < 128 && mod->poslist[i] < 128; i++) {
-		mod->n_channels = (mod->n_channels > mod->poslist[i] ? mod->n_channels : mod->poslist[i]);
-	}
-	printf("Channels: %d\n", mod->n_channels);
+	if(verbose)
+		printf("Samples: %d\n", mod->n_samples);
 	return 1;
 }
 
